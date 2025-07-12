@@ -12,6 +12,7 @@ export default function ContactModal({ isOpen, onClose }) {
 
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -60,6 +61,8 @@ export default function ContactModal({ isOpen, onClose }) {
       return;
     }
 
+    setIsLoading(true); // Start loading
+
     const templateParams = {
       email: formData.email,
       name: formData.name,
@@ -85,10 +88,12 @@ export default function ContactModal({ isOpen, onClose }) {
           );
           setFormData({ name: "", email: "", phone: "", message: "" });
           setTimeout(() => setSuccessMessage(""), 4000);
+          setIsLoading(false); // Stop loading
         },
         (error) => {
           console.error("Failed to send email:", error);
           setSuccessMessage("Something went wrong. Please try again.");
+          setIsLoading(false); // Stop loading
         }
       );
   };
@@ -176,13 +181,16 @@ export default function ContactModal({ isOpen, onClose }) {
 
           <button
             type="submit"
-            className="w-full py-3 cursor-pointer rounded-full font-semibold text-white transition hover:scale-[1.03]"
+            disabled={isLoading}
+            className={`w-full py-3 cursor-pointer rounded-full font-semibold text-white transition hover:scale-[1.03] ${
+              isLoading ? "opacity-60 cursor-not-allowed" : ""
+            }`}
             style={{
               background:
                 "linear-gradient(to right, var(--cta-gradient-start), var(--cta-gradient-end))",
             }}
           >
-            Submit
+            {isLoading ? "Sending..." : "Submit"}
           </button>
         </form>
       </div>
