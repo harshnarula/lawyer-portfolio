@@ -4,7 +4,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import ContactModal from "./components/ContactModal";
 import emailjs from "@emailjs/browser";
 
-emailjs.init("k0RRVQEnYFOqyJb1y");
+emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
 
 function App() {
   const [scrolled, setScrolled] = useState(false);

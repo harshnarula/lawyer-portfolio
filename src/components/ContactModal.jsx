@@ -67,20 +67,30 @@ export default function ContactModal({ isOpen, onClose }) {
       message: formData.message,
     };
 
-    emailjs.send("service_kn1douf", "template_za82o1n", templateParams).then(
-      (response) => {
-        console.log("Email sent successfully!", response.status, response.text);
-        setSuccessMessage(
-          "Thank you for reaching out. Your message has been successfully delivered — we’ll get back to you shortly."
-        );
-        setFormData({ name: "", email: "", phone: "", message: "" });
-        setTimeout(() => setSuccessMessage(""), 4000);
-      },
-      (error) => {
-        console.error("Failed to send email:", error);
-        setSuccessMessage("Something went wrong. Please try again.");
-      }
-    );
+    emailjs
+      .send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams
+      )
+      .then(
+        (response) => {
+          console.log(
+            "Email sent successfully!",
+            response.status,
+            response.text
+          );
+          setSuccessMessage(
+            "Thank you for reaching out. Your message has been successfully delivered — we’ll get back to you shortly."
+          );
+          setFormData({ name: "", email: "", phone: "", message: "" });
+          setTimeout(() => setSuccessMessage(""), 4000);
+        },
+        (error) => {
+          console.error("Failed to send email:", error);
+          setSuccessMessage("Something went wrong. Please try again.");
+        }
+      );
   };
 
   if (!isOpen) return null;
