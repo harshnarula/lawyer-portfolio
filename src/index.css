@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #1b3a36;
+  --accent: #cba135;
+  --accent-light: #fdf7ea;
+  --background: #faf9f6;
+  --text-main: #2d302f;
+  --text-secondary: #4d4f4e;
+  --card-bg: #ffffff;
+  --cta-gradient-start: #cba135;
+  --cta-gradient-end: #af9542;
+  --white: #ffffff;
+
+  /* New: For scrolled navbar (Refined Version) */
+  --navbar-scrolled-bg: #ece8e0; /* neutral taupe-beige */
+  --navbar-scrolled-text: #2f3634; /* softened dark greenish-gray */
+  --navbar-scrolled-accent: #d4aa3f; /* brighter, richer gold */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* index.css */
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.fade-in-scale {
+  animation: fadeInScale 0.3s ease-out forwards;
+}
+
+@keyframes blurIn {
+  0% {
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    backdrop-filter: blur(4px);
+  }
+}
+
+.blur-in {
+  animation: blurIn 0.3s ease-out forwards;
+}
