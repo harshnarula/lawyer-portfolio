@@ -22,12 +22,10 @@ export default function ContactModal({ isOpen, onClose }) {
   const validate = () => {
     const newErrors = {};
 
-    // Name validation
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     }
 
-    // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else {
@@ -37,15 +35,14 @@ export default function ContactModal({ isOpen, onClose }) {
       }
     }
 
-    // Phone validation (optional)
     if (formData.phone.trim()) {
-      const phoneRegex = /^[6-9]\d{9}$/; // Indian mobile format (10 digits starting with 6-9)
-      if (!phoneRegex.test(formData.phone)) {
+      const cleanedPhone = formData.phone.trim();
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(cleanedPhone)) {
         newErrors.phone = "Enter a valid 10-digit phone number";
       }
     }
 
-    // Message validation
     if (!formData.message.trim()) {
       newErrors.message = "Message is required";
     }
@@ -56,12 +53,14 @@ export default function ContactModal({ isOpen, onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const validationErrors = validate();
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      console.log("Validation errors:", validationErrors);
       return;
     }
 
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
 
     const templateParams = {
       email: formData.email,
@@ -69,6 +68,8 @@ export default function ContactModal({ isOpen, onClose }) {
       phone: formData.phone || "Not Provided",
       message: formData.message,
     };
+
+    console.log("Test 2");
 
     emailjs
       .send(
@@ -83,17 +84,23 @@ export default function ContactModal({ isOpen, onClose }) {
             response.status,
             response.text
           );
+          console.log("Test 3");
+
           setSuccessMessage(
             "Thank you for reaching out. Your message has been successfully delivered — we’ll get back to you shortly."
           );
+
           setFormData({ name: "", email: "", phone: "", message: "" });
+
           setTimeout(() => setSuccessMessage(""), 4000);
-          setIsLoading(false); // Stop loading
+          setIsLoading(false);
         },
         (error) => {
           console.error("Failed to send email:", error);
           setSuccessMessage("Something went wrong. Please try again.");
-          setIsLoading(false); // Stop loading
+          setIsLoading(false);
+
+          setFormData({ name: "", email: "", phone: "", message: "" });
         }
       );
   };
@@ -159,8 +166,13 @@ export default function ContactModal({ isOpen, onClose }) {
               onChange={handleChange}
               placeholder="Phone (Optional)"
               type="tel"
-              className="w-full px-4 py-3 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] shadow-sm"
+              className={`w-full px-4 py-3 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] shadow-sm ${
+                errors.phone ? "ring-2 ring-red-500" : ""
+              }`}
             />
+            {errors.phone && (
+              <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+            )}
           </div>
 
           <div>
